@@ -188,7 +188,11 @@
       background-color: #060b12;
     }
 
+    .viewport.ready { opacity: 1; }
     .viewport {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      will-change: opacity;
       position: relative;
       width: 100%;
       height: 100%;
@@ -433,7 +437,7 @@
       width: 100%;
       height: 100%;
       overflow: visible;
-      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.22));
+      
     }
 
     .leaf-anim-left {
@@ -778,9 +782,8 @@
       top: -42px; /* Justo sobre la flor central */
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(18, 28, 45, 0.90);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(18, 28, 45, 0.96);
+      transform: translateX(-50%) translateZ(0);
       border: 1.5px solid #fed070;
       padding: 7px 16px;
       border-radius: 24px;
@@ -833,9 +836,8 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      background: rgba(18, 28, 45, 0.78);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(18, 28, 45, 0.92);
+      transform: translateX(-50%) translateZ(0);
       border: 1px solid rgba(255, 215, 120, 0.3);
       padding: 10px 20px;
       border-radius: 40px;
@@ -925,8 +927,7 @@
       left: 20px;
       z-index: 50;
       background: rgba(14, 25, 42, 0.82);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      /* Filtro simplificado para máxima fluidez */
       border: 1px solid rgba(255, 255, 255, 0.16);
       padding: 15px 18px;
       border-radius: 14px;
@@ -1031,28 +1032,27 @@
       transform: translateY(-1px);
     }
 
-    /* MODAL DE HISTORIA */
+    /* MODAL DE HISTORIA - PRE-RENDERIZADO GPU SIN TIRONES */
     .story-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(5, 10, 18, 0.75);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(8, 14, 24, 0.94);
       z-index: 100;
-      display: none;
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.32s ease, visibility 0.32s ease;
+      will-change: opacity, visibility;
     }
 
     .story-overlay.active {
-      display: flex;
-      animation: modalIn 0.35s ease-out;
-    }
-
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
     }
 
     .story-parchment {
@@ -1069,6 +1069,13 @@
       border: 1px solid #e2d7c5;
       line-height: 1.7;
       font-family: 'Georgia', serif;
+      transform: scale(0.94) translateY(8px);
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    .story-overlay.active .story-parchment {
+      transform: scale(1) translateY(0);
     }
 
     .close-btn {
@@ -1100,30 +1107,22 @@
 
     .story-quote strong { color: #844c00; font-style: normal; }
 
-    #ytPlayerContainer {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-    }
+    
   
     /* PORTAL DE ENTRADA / BIENVENIDA CON MÚSICA GARANTIZADA */
     .welcome-portal {
       position: fixed;
       inset: 0;
       z-index: 999;
-      background: rgba(10, 16, 28, 0.78);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: #090e18; /* 100% Sólido opaco: cero parpadeo ni sangrado visual */
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
       padding: 20px;
+      will-change: opacity, visibility;
+      transform: translateZ(0);
     }
 
     .welcome-portal.fade-out {
@@ -1261,6 +1260,50 @@
   </style>
 </head>
 <body data-theme="sunset">
+  <!-- DEFS GLOBALES COMPARTIDOS (OPTIMIZACIÓN DE GPU 60 FPS) -->
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+    <defs>
+      <linearGradient id="global_stemCyl" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#2a4515"/>
+        <stop offset="30%" stop-color="#7ab442"/>
+        <stop offset="68%" stop-color="#4e7c2a"/>
+        <stop offset="100%" stop-color="#243b12"/>
+      </linearGradient>
+
+      <linearGradient id="global_stemNeck" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#462214"/>
+        <stop offset="28%" stop-color="#562e1a"/>
+        <stop offset="55%" stop-color="#4e441e"/>
+        <stop offset="85%" stop-color="#466f26"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </linearGradient>
+
+      <linearGradient id="global_leafL_light" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#88c24e"/>
+        <stop offset="45%" stop-color="#609436"/>
+        <stop offset="100%" stop-color="#3d6820"/>
+      </linearGradient>
+
+      <linearGradient id="global_leafL_dark" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#55862e"/>
+        <stop offset="50%" stop-color="#3d6220"/>
+        <stop offset="100%" stop-color="#284414"/>
+      </linearGradient>
+
+      <linearGradient id="global_leafR_light" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#90ca52"/>
+        <stop offset="45%" stop-color="#659b3a"/>
+        <stop offset="100%" stop-color="#3f6c24"/>
+      </linearGradient>
+
+      <linearGradient id="global_leafR_dark" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#588a32"/>
+        <stop offset="50%" stop-color="#3e6422"/>
+        <stop offset="100%" stop-color="#264214"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
   <!-- PORTAL DE ENTRADA CON MÚSICA AUTOMÁTICA -->
   <div id="welcomePortal" class="welcome-portal" onclick="enterExperience()">
     <div class="portal-card">
@@ -1364,14 +1407,12 @@
       </button>
     </div>
 
-    <audio id="localAudio" loop preload="auto">
+    <audio id="localAudio" loop preload="metadata">
       <source src="lust_for_life.mp3" type="audio/mpeg">
       <source src="https://archive.org/download/03-13-beaches/02%20Lust%20for%20Life.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="ytPlayerContainer">
-      <div id="ytPlayer"></div>
-    </div>
+    
 
 
   </div>
@@ -1429,111 +1470,33 @@
     ];
 
     
-    let stemCounter = 0;
-
-    function getBotanicalStemAndLeavesSVG(uid) {
+    function getBotanicalStemAndLeavesSVG() {
       return `
         <svg class="botanical-stem-leaf-svg" viewBox="0 0 120 280" preserveAspectRatio="none">
-          <defs>
-            <!-- Degradado cilíndrico de volumen del tallo con luz lateral -->
-            <linearGradient id="${uid}_stemCyl" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#2a4515"/>
-              <stop offset="30%" stop-color="#7ab442"/>
-              <stop offset="68%" stop-color="#4e7c2a"/>
-              <stop offset="100%" stop-color="#243b12"/>
-            </linearGradient>
-
-            <!-- Cuello superior marrón rojizo / oliva oscuro idéntico a la foto -->
-            <linearGradient id="${uid}_stemNeck" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#462214"/>
-              <stop offset="28%" stop-color="#562e1a"/>
-              <stop offset="55%" stop-color="#4e441e"/>
-              <stop offset="85%" stop-color="#466f26"/>
-              <stop offset="100%" stop-color="transparent"/>
-            </linearGradient>
-
-            <!-- Hoja izquierda - lado iluminado y aterciopelado -->
-            <linearGradient id="${uid}_leafL_light" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#88c24e"/>
-              <stop offset="45%" stop-color="#609436"/>
-              <stop offset="100%" stop-color="#3d6820"/>
-            </linearGradient>
-
-            <!-- Hoja izquierda - lado sombreado con quilla tridimensional -->
-            <linearGradient id="${uid}_leafL_dark" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#55862e"/>
-              <stop offset="50%" stop-color="#3d6220"/>
-              <stop offset="100%" stop-color="#284414"/>
-            </linearGradient>
-
-            <!-- Hoja derecha - lado iluminado -->
-            <linearGradient id="${uid}_leafR_light" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#90ca52"/>
-              <stop offset="45%" stop-color="#659b3a"/>
-              <stop offset="100%" stop-color="#3f6c24"/>
-            </linearGradient>
-
-            <!-- Hoja derecha - lado sombreado -->
-            <linearGradient id="${uid}_leafR_dark" x1="100%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#588a32"/>
-              <stop offset="50%" stop-color="#3e6422"/>
-              <stop offset="100%" stop-color="#264214"/>
-            </linearGradient>
-          </defs>
-
           <!-- TALLO ESBELTO REALISTA -->
-          <path d="M 58,4 L 62,4 L 63.6,278 L 56.4,278 Z" fill="url(#${uid}_stemCyl)"/>
-          <path d="M 58,4 L 62,4 L 62.8,110 L 57.2,110 Z" fill="url(#${uid}_stemNeck)"/>
+          <path d="M 58,4 L 62,4 L 63.6,278 L 56.4,278 Z" fill="url(#global_stemCyl)"/>
+          <path d="M 58,4 L 62,4 L 62.8,110 L 57.2,110 Z" fill="url(#global_stemNeck)"/>
 
           <!-- HOJA IZQUIERDA ENVOLVENTE EN FORMA DE S (FOTO REAL) -->
           <g class="leaf-anim-left">
-            <!-- Quilla en sombra -->
-            <path d="M 58.5,276 
-                     C 56,228 45,178 33,136 
-                     C 25,108 19,84 15,66 
-                     C 18,84 27,116 35,143 
-                     C 47,186 56,232 58.5,276 Z" 
-                  fill="url(#${uid}_leafL_dark)"/>
-            <!-- Cara iluminada curvada que abraza el tallo -->
-            <path d="M 58.5,276 
-                     C 59.5,224 57,173 47,133 
-                     C 39,98 27,76 15,66 
-                     C 24,86 37,120 46,154 
-                     C 56,193 58,236 58.5,276 Z" 
-                  fill="url(#${uid}_leafL_light)"/>
-            <!-- Nervadura central nítida -->
-            <path d="M 58.5,276 C 58,225 50,176 39,134 C 29,102 21,80 15,66" 
-                  stroke="rgba(215, 255, 160, 0.5)" stroke-width="0.9" fill="none"/>
+            <path d="M 58.5,276 C 56,228 45,178 33,136 C 25,108 19,84 15,66 C 18,84 27,116 35,143 C 47,186 56,232 58.5,276 Z" fill="url(#global_leafL_dark)"/>
+            <path d="M 58.5,276 C 59.5,224 57,173 47,133 C 39,98 27,76 15,66 C 24,86 37,120 46,154 C 56,193 58,236 58.5,276 Z" fill="url(#global_leafL_light)"/>
+            <path d="M 58.5,276 C 58,225 50,176 39,134 C 29,102 21,80 15,66" stroke="rgba(215, 255, 160, 0.4)" stroke-width="0.8" fill="none"/>
           </g>
 
           <!-- HOJA DERECHA ENVOLVENTE ACANALADA (FOTO REAL) -->
           <g class="leaf-anim-right">
-            <!-- Lado posterior en sombra -->
-            <path d="M 60,278 
-                     C 61,226 64,180 72,140 
-                     C 80,103 92,84 105,72 
-                     C 95,90 85,116 77,148 
-                     C 67,190 63,236 60,278 Z" 
-                  fill="url(#${uid}_leafR_dark)"/>
-            <!-- Cara frontal iluminada -->
-            <path d="M 60,278 
-                     C 63,230 70,184 80,144 
-                     C 88,112 97,92 105,72 
-                     C 99,98 91,128 82,160 
-                     C 72,200 64,240 60,278 Z" 
-                  fill="url(#${uid}_leafR_light)"/>
-            <!-- Nervadura central de la hoja derecha -->
-            <path d="M 60,278 C 62,228 67,182 76,142 C 84,107 96,88 105,72" 
-                  stroke="rgba(220, 255, 170, 0.5)" stroke-width="0.9" fill="none"/>
+            <path d="M 60,278 C 61,226 64,180 72,140 C 80,103 92,84 105,72 C 95,90 85,116 77,148 C 67,190 63,236 60,278 Z" fill="url(#global_leafR_dark)"/>
+            <path d="M 60,278 C 63,230 70,184 80,144 C 88,112 97,92 105,72 C 99,98 91,128 82,160 C 72,200 64,240 60,278 Z" fill="url(#global_leafR_light)"/>
+            <path d="M 60,278 C 62,228 67,182 76,142 C 84,107 96,88 105,72" stroke="rgba(220, 255, 170, 0.4)" stroke-width="0.8" fill="none"/>
           </g>
 
-          <!-- Vaina basal envolvente que une hojas al tallo -->
-          <path d="M 55.5,250 C 58,245 62,245 64.5,250 L 64.5,278 L 55.5,278 Z" fill="#6ba038" opacity="0.92"/>
+          <path d="M 55.5,250 C 58,245 62,245 64.5,250 L 64.5,278 L 55.5,278 Z" fill="#6ba038" opacity="0.9"/>
         </svg>
       `;
     }
 
-    function createTulip(xPos, layer) {
+        function createTulip(xPos, layer) {
       const el = document.createElement('div');
       el.className = 'tulip';
 
@@ -1574,13 +1537,12 @@
         el.style.filter = `blur(${layer.blur}) drop-shadow(0 10px 8px rgba(0,0,0,0.25))`;
       }
 
-      stemCounter++;
-      const uid = `stem_${stemCounter}`;
+      
 
       // Estructura DOM botánica ultra realista
       el.innerHTML = `
         <div class="tulip-stem">
-          ${getBotanicalStemAndLeavesSVG(uid)}
+          ${getBotanicalStemAndLeavesSVG()}
           <div class="tulip-flower">
             <div class="tulip-glow-halo"></div>
             <div class="flower-calyx"></div>
@@ -1613,14 +1575,16 @@
       }, 250);
     }
 
-    // Poblado distribuido orgánico con cobertura completa
+    // DocumentFragment atómico para tulipanes (0 parpadeos ni reflujos continuos)
+    const tulipFragment = document.createDocumentFragment();
+
     depthLayers.forEach(layer => {
       for (let i = 0; i < layer.count; i++) {
         const basePct = (i / layer.count) * 110 - 5;
         const jitter = (Math.random() * 8 - 4);
         const xPos = Math.max(-4, Math.min(104, basePct + jitter));
         const tulip = createTulip(xPos, layer);
-        forest.appendChild(tulip);
+        tulipFragment.appendChild(tulip);
       }
     });
 
@@ -1644,11 +1608,11 @@
       el.style.setProperty('--flower-w', `${flowerW}px`);
       el.style.setProperty('--flexibility', '0.6');
 
-      const heroUid = 'hero_stem';
+      
 
       el.innerHTML = `
         <div class="tulip-stem">
-          ${getBotanicalStemAndLeavesSVG(heroUid)}
+          ${getBotanicalStemAndLeavesSVG()}
 
           <!-- Listón Amarillo Satinado Vectorial Realista -->
           <div class="yellow-ribbon-container" title="Presiona aquí">
@@ -1725,18 +1689,20 @@
         triggerTulipSway(el); // Solo se balancea suavemente si se toca por error, NO abre la historia
       });
 
-      forest.appendChild(el);
+      return el;
     }
 
-    // Invocar tulipán protagonista
-    createHeroStoryTulip();
+    // Agregar tulipán protagonista al fragmento y volcar todo al bosque en un solo pulso atómico
+    tulipFragment.appendChild(createHeroStoryTulip());
+    forest.appendChild(tulipFragment);
 
 
 
     /* ==========================================================================
-       75 BRILLITOS Y DESTELLOS MÁGICOS
+       BRILLITOS Y DESTELLOS MÁGICOS OPTIMIZADOS (FRAGMENTO ATÓMICO)
        ========================================================================== */
-    const SPARKLE_COUNT = 75;
+    const SPARKLE_COUNT = isMobile ? 22 : 45;
+    const sparkleFragment = document.createDocumentFragment();
     for (let i = 0; i < SPARKLE_COUNT; i++) {
       const sp = document.createElement('div');
       sp.className = 'magic-sparkle';
@@ -1753,11 +1719,14 @@
       sp.style.setProperty('--speed', `${speed}s`);
       sp.style.setProperty('--delay', `${del}s`);
       sp.style.setProperty('--max-op', maxOp);
-      sparklesContainer.appendChild(sp);
+      sparkleFragment.appendChild(sp);
     }
+    sparklesContainer.appendChild(sparkleFragment);
 
-    /* CÉSPED */
-    for (let i = 0; i < 95; i++) {
+    /* CÉSPED (FRAGMENTO ATÓMICO) */
+    const GRASS_COUNT = isMobile ? 35 : 70;
+    const grassFragment = document.createDocumentFragment();
+    for (let i = 0; i < GRASS_COUNT; i++) {
       const b = document.createElement('div');
       b.className = 'grass-item';
       b.style.setProperty('--gh', `${Math.floor(Math.random() * 45 + 40)}px`);
@@ -1765,8 +1734,13 @@
       b.style.setProperty('--gr', `${Math.floor(Math.random() * 28 - 14)}deg`);
       b.style.setProperty('--gd', `${(Math.random() * 2 + 2.4).toFixed(2)}s`);
       b.style.setProperty('--gdel', `${(Math.random() * -4).toFixed(2)}s`);
-      grassContainer.appendChild(b);
+      grassFragment.appendChild(b);
     }
+    grassContainer.appendChild(grassFragment);
+
+    // Activar inmediatamente el viewport una vez ensamblado todo el DOM
+    const vp = document.querySelector('.viewport');
+    if (vp) vp.classList.add('ready');
 
     /* BRISA INTERACTIVA */
     let mouseTimer;
@@ -1896,7 +1870,7 @@
       const portal = document.getElementById('welcomePortal');
       if (portal) {
         portal.classList.add('fade-out');
-        setTimeout(() => { portal.remove(); }, 850);
+        setTimeout(() => { portal.remove(); }, 460);
       }
       playMusicWithFade().catch(err => {
         console.warn("Reintentando reproduccion:", err);
@@ -1909,25 +1883,8 @@
       });
     }
 
-    // Intentar inicio autónomo si el navegador lo permite
-    function checkDirectAutoplay() {
-      playMusicWithFade().then(() => {
-        // Si el navegador permitió autoplay sin gesto, desvanecer portal automáticamente
-        const portal = document.getElementById('welcomePortal');
-        if (portal) {
-          portal.classList.add('fade-out');
-          setTimeout(() => { portal.remove(); }, 850);
-        }
-      }).catch(() => {
-        // El navegador espera el clic en el portal (comportamiento estándar de seguridad)
-      });
-    }
-
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      setTimeout(checkDirectAutoplay, 250);
-    } else {
-      window.addEventListener('DOMContentLoaded', () => setTimeout(checkDirectAutoplay, 250));
-    }
+    // Cero parpadeos: Esperar la interacción deliberada del usuario en el portal
+    // para desbloquear el audio del navegador sin bloqueos ni cortes.
   </script>
 </body>
 </html>
