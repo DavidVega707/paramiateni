@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bosque de Tulipanes Amarillos | Pétalos Nítidos, Diversidad y Atardecer Dorado</title>
+  <style>
+    /* ==========================================================================
+       CONFIGURACIÓN GENERAL & ILUMINACIÓN
+       ========================================================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    :root {
+      /* ATARDECER CÁLIDO NARANJA & MIEL (POR DEFECTO) */
+      --sky-top: #192336;
+      --sky-mid: #ba6015;
+      --sky-low: #f38318;
+      --sky-bot: #fed070;
+      --sun-core: #fff4cc;
+      --sun-corona: rgba(255, 175, 40, 0.95);
+      --sun-flare: rgba(255, 140, 20, 0.65);
+      --sun-ray-color: rgba(255, 195, 75, 0.22);
+      --haze-color: rgba(255, 170, 70, 0.35);
+
+      --mtn-far-top: #473a48;
+      --mtn-far-bot: #6a4f47;
+      --mtn-mid-top: #3e3839;
+      --mtn-mid-bot: #5b4a3a;
+      --mtn-near-top: #2c2f21;
+      --mtn-near-bot: #423e27;
+
+      --ground-back: #26331a;
+      --ground-mid: #1e2613;
+      --ground-front: #13190b;
+
+      /* Tulipanes: Amarillo Dorado con Profundidad y Pétalos Separados */
+      --tulip-sunlight-glow: rgba(255, 190, 40, 0.55);
+      --tulip-inner-amber: #9a3412;
+      --tulip-shadow-amber: #d97706;
+      --tulip-body-yellow: #f59e0b;
+      --tulip-vibrant-yellow: #ffd000;
+      --tulip-bright-gold: #ffe642;
+      --tulip-sunlit-rim: #fffdec;
+      --tulip-base-green: #658826;
+
+      --stem-color-base: #2f4e1e;
+      --stem-color-mid: #4a742c;
+      --stem-color-top: #658c35;
+      --leaf-color-1: #243a1a;
+      --leaf-color-2: #43642d;
+      --leaf-color-light: #6a964a;
+      --leaf-sun-rim: rgba(255, 210, 120, 0.55);
+
+      --sparkle-core: #ffffff;
+      --sparkle-glow: rgba(255, 215, 64, 0.95);
+      --sparkle-aura: rgba(255, 140, 20, 0.7);
+      --wind-speed-mult: 1;
+      --wind-gust: 0deg;
+    }
+
+    body[data-theme="dawn"] {
+      --sky-top: #1a3250;
+      --sky-mid: #965a6e;
+      --sky-low: #e89865;
+      --sky-bot: #ffdda1;
+      --sun-core: #fffceb;
+      --sun-corona: rgba(255, 220, 130, 0.95);
+      --sun-flare: rgba(255, 195, 80, 0.5);
+      --sun-ray-color: rgba(255, 235, 180, 0.18);
+      --haze-color: rgba(255, 215, 160, 0.32);
+      --mtn-far-top: #5c6280;
+      --mtn-far-bot: #7d718a;
+      --mtn-mid-top: #405459;
+      --mtn-mid-bot: #5b6f68;
+      --mtn-near-top: #2c4436;
+      --mtn-near-bot: #3e5c4a;
+      --ground-back: #2b4524;
+      --ground-mid: #20341a;
+      --ground-front: #142310;
+      --tulip-sunlight-glow: rgba(255, 210, 50, 0.6);
+      --tulip-inner-amber: #8a300e;
+      --tulip-shadow-amber: #cf6f00;
+      --tulip-body-yellow: #f5a800;
+      --tulip-vibrant-yellow: #ffd51e;
+      --tulip-bright-gold: #ffea75;
+      --tulip-sunlit-rim: #fffde0;
+      --tulip-base-green: #608832;
+      --stem-color-base: #385e25;
+      --stem-color-mid: #5b873d;
+      --stem-color-top: #737c3f;
+      --leaf-color-1: #2d4f20;
+      --leaf-color-2: #4f7936;
+      --leaf-color-light: #76a853;
+      --leaf-sun-rim: rgba(185, 235, 130, 0.5);
+      --sparkle-core: #ffffff;
+      --sparkle-glow: rgba(255, 230, 120, 0.95);
+      --sparkle-aura: rgba(255, 190, 40, 0.6);
+    }
+
+    body[data-theme="noon"] {
+      --sky-top: #1e6bb8;
+      --sky-mid: #54a5e5;
+      --sky-low: #9fd3f7;
+      --sky-bot: #dcf2ff;
+      --sun-core: #ffffff;
+      --sun-corona: rgba(255, 255, 230, 0.95);
+      --sun-flare: rgba(255, 240, 160, 0.5);
+      --sun-ray-color: rgba(255, 255, 255, 0.18);
+      --haze-color: rgba(210, 238, 255, 0.28);
+      --mtn-far-top: #5c7b99;
+      --mtn-far-bot: #7395b3;
+      --mtn-mid-top: #3b6b61;
+      --mtn-mid-bot: #518579;
+      --mtn-near-top: #295738;
+      --mtn-near-bot: #39734d;
+      --ground-back: #345c25;
+      --ground-mid: #26461a;
+      --ground-front: #193110;
+      --tulip-sunlight-glow: rgba(255, 225, 80, 0.5);
+      --tulip-inner-amber: #944005;
+      --tulip-shadow-amber: #d97706;
+      --tulip-body-yellow: #ffb703;
+      --tulip-vibrant-yellow: #ffdb15;
+      --tulip-bright-gold: #ffef6c;
+      --tulip-sunlit-rim: #ffffff;
+      --tulip-base-green: #689635;
+      --stem-color-base: #3e6829;
+      --stem-color-mid: #659744;
+      --stem-color-top: #788c42;
+      --leaf-color-1: #325723;
+      --leaf-color-2: #58873d;
+      --leaf-color-light: #7cb559;
+      --leaf-sun-rim: rgba(210, 255, 150, 0.6);
+      --sparkle-core: #ffffff;
+      --sparkle-glow: rgba(255, 255, 190, 0.9);
+      --sparkle-aura: rgba(255, 230, 120, 0.5);
+    }
+
+    body[data-theme="night"] {
+      --sky-top: #03070f;
+      --sky-mid: #091322;
+      --sky-low: #112138;
+      --sky-bot: #1c3355;
+      --sun-core: #dcf0ff;
+      --sun-corona: rgba(140, 205, 255, 0.8);
+      --sun-flare: rgba(80, 160, 240, 0.35);
+      --sun-ray-color: rgba(180, 220, 255, 0.08);
+      --haze-color: rgba(35, 60, 95, 0.35);
+      --mtn-far-top: #0e1724;
+      --mtn-far-bot: #162233;
+      --mtn-mid-top: #0d1a21;
+      --mtn-mid-bot: #13242c;
+      --mtn-near-top: #0a1714;
+      --mtn-near-bot: #10211b;
+      --ground-back: #0b170e;
+      --ground-mid: #081109;
+      --ground-front: #050b06;
+      --tulip-sunlight-glow: rgba(255, 235, 90, 0.85);
+      --tulip-inner-amber: #502500;
+      --tulip-shadow-amber: #794002;
+      --tulip-body-yellow: #b5820a;
+      --tulip-vibrant-yellow: #daa318;
+      --tulip-bright-gold: #e8bf45;
+      --tulip-sunlit-rim: #f6e18f;
+      --tulip-base-green: #2c381c;
+      --stem-color-base: #182813;
+      --stem-color-mid: #283d1e;
+      --stem-color-top: #3b4226;
+      --leaf-color-1: #142310;
+      --leaf-color-2: #22351a;
+      --leaf-color-light: #344d28;
+      --leaf-sun-rim: rgba(150, 210, 255, 0.35);
+      --sparkle-core: #fffceb;
+      --sparkle-glow: rgba(255, 245, 140, 1);
+      --sparkle-aura: rgba(255, 220, 80, 0.85);
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: #060b12;
+    }
+
+    .viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .sky {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 40%, var(--sky-low) 70%, var(--sky-bot) 100%);
+      transition: background 1.6s ease;
+      z-index: 1;
+    }
+
+    /* SOL CÁLIDO CON RAYOS CIRCULARES SUAVES */
+    .sun-light-system {
+      position: absolute;
+      top: 20%;
+      right: 28%;
+      width: 440px;
+      height: 440px;
+      pointer-events: none;
+      z-index: 2;
+      transition: all 1.6s ease;
+      overflow: visible;
+    }
+
+    .sun-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 115px;
+      height: 115px;
+      background: var(--sun-core);
+      border-radius: 50%;
+      box-shadow: 
+        0 0 45px var(--sun-corona),
+        0 0 110px var(--sun-flare),
+        0 0 180px var(--sun-flare);
+      animation: sunBreathing 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes sunBreathing {
+      0% { transform: translate(-50%, -50%) scale(0.96); opacity: 0.92; }
+      100% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; }
+    }
+
+    .sun-rays {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 800px;
+      height: 800px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: repeating-conic-gradient(
+        from 35deg at 50% 50%,
+        var(--sun-ray-color) 0deg,
+        var(--sun-ray-color) 9deg,
+        transparent 15deg,
+        transparent 30deg
+      );
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 70%);
+      mask-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,1) 20%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 70%);
+      animation: raysRotate 140s linear infinite;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    @keyframes raysRotate {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .ambient-sun-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 72% 25%, var(--sun-flare) 0%, transparent 65%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* MONTAÑAS SUAVES Y SERENAS (SIN PICOS EMPINADOS) */
+    .mountains-container {
+      position: absolute;
+      bottom: 20%;
+      width: 100%;
+      height: 32%;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .mountains-far {
+      position: absolute;
+      bottom: 0;
+      left: -5%;
+      width: 110%;
+      height: 100%;
+    }
+
+    .mountains-far svg {
+      width: 100%;
+      height: 100%;
+      filter: blur(1.5px);
+    }
+
+    .mountains-mid {
+      position: absolute;
+      bottom: -10px;
+      left: -5%;
+      width: 110%;
+      height: 85%;
+      z-index: 5;
+    }
+
+    .mountains-mid svg {
+      width: 100%;
+      height: 100%;
+      filter: blur(0.6px);
+    }
+
+    .valley-mist {
+      position: absolute;
+      bottom: 18%;
+      width: 100%;
+      height: 95px;
+      background: linear-gradient(to top, var(--haze-color), transparent);
+      filter: blur(18px);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .mountains-near {
+      position: absolute;
+      bottom: -15px;
+      left: -5%;
+      width: 110%;
+      height: 60%;
+      z-index: 7;
+    }
+
+    .mountains-near svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* PRADERA CONTINUA NATURAL (SIN CERROS REDONDOS NI DOMOS) */
+    .meadow-back {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 28%;
+      background: linear-gradient(to top, #091307 0%, #14250c 55%, #233a14 100%);
+      border-radius: 0;
+      z-index: 8;
+      transition: background 1.6s ease;
+    }
+
+    .meadow-mid {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 20%;
+      background: linear-gradient(to top, #060e04 0%, #101e0a 60%, #1a2f0f 100%);
+      border-radius: 0;
+      z-index: 11;
+      transition: background 1.6s ease;
+    }
+
+    .meadow-front {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 12%;
+      background: linear-gradient(to top, #030702 0%, #091406 80%, #12220b 100%);
+      border-radius: 0;
+      z-index: 15;
+      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.6);
+      transition: background 1.6s ease;
+    }
+
+    /* ==========================================================================
+       BOSQUE DE TULIPANES (SISTEMA DE CAPAS Y ANATOMÍA VEGETAL CSS)
+       ========================================================================== */
+    .tulip-forest-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Contenedor Tulipán individual con cinemática de viento */
+    .tulip {
+      position: absolute;
+      bottom: var(--bottom, 0px);
+      left: var(--left, 50%);
+      transform-origin: bottom center;
+      transform: scale(var(--scale, 1)) rotate(calc(var(--wind-gust-angle) * var(--flexibility, 1)));
+      animation: tulipWindSway calc(var(--duration, 4s) / var(--wind-speed-mult)) ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+      z-index: var(--z, 8);
+      filter: drop-shadow(0 15px 12px rgba(0, 0, 0, 0.28));
+      pointer-events: auto;
+      cursor: pointer;
+      will-change: transform;
+      transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    .tulip:hover {
+      transform: scale(calc(var(--scale, 1) * 1.12)) rotate(calc(var(--rest-tilt, 0deg) + 9deg));
+    }
+
+    @keyframes tulipWindSway {
+      0% {
+        transform: scale(var(--scale, 1)) rotate(calc(var(--rest-tilt, 0deg) - 2.8deg));
+      }
+      50% {
+        transform: scale(var(--scale, 1)) rotate(calc(var(--rest-tilt, 0deg) + 1.2deg));
+      }
+      100% {
+        transform: scale(var(--scale, 1)) rotate(calc(var(--rest-tilt, 0deg) + 6.8deg));
+      }
+    }
+
+    /* ==========================================================================
+       TALLO Y HOJAS BOTÁNICAS REALISTAS (MODELADAS SEGÚN FOTO DE REFERENCIA)
+       ========================================================================== */
+    .tulip-stem {
+      position: relative;
+      width: 105px;
+      height: var(--stem-h, 215px);
+      margin: 0 auto;
+      transform-origin: bottom center;
+    }
+
+    .botanical-stem-leaf-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.22));
+    }
+
+    .leaf-anim-left {
+      transform-origin: 58px 276px;
+      animation: botLeafSwayL calc(var(--duration, 4.4s) * 1.06) ease-in-out infinite alternate;
+    }
+
+    .leaf-anim-right {
+      transform-origin: 60px 278px;
+      animation: botLeafSwayR calc(var(--duration, 4.4s) * 0.94) ease-in-out infinite alternate;
+    }
+
+    @keyframes botLeafSwayL {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-3.2deg); }
+    }
+
+    @keyframes botLeafSwayR {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(3.8deg); }
+    }
+
+    /* Flor / Corona de Pétalos */
+    .tulip-flower {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: var(--flower-w, 52px);
+      height: var(--flower-h, 64px);
+      transform-origin: bottom center;
+      animation: flowerNod calc(var(--duration, 4s) * 0.8) ease-in-out infinite alternate;
+      z-index: 10;
+    }
+
+    @keyframes flowerNod {
+      0% { transform: translateX(-50%) rotate(-2.5deg); }
+      100% { transform: translateX(-50%) rotate(4deg); }
+    }
+
+    .flower-calyx {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 11px;
+      height: 8px;
+      background: linear-gradient(to top, #4a2618 0%, #5d6f28 60%, #a88d18 100%);
+      border-radius: 0 0 8px 8px;
+      z-index: 1;
+    }
+
+    /* Pétalo Trasero */
+    .petal-back {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(var(--flower-w, 52px) * 0.65);
+      height: calc(var(--flower-h, 64px) * 0.95);
+      background: radial-gradient(circle at 50% 25%, var(--tulip-bright-gold) 0%, var(--tulip-body-yellow) 65%, var(--tulip-shadow-amber) 100%);
+      border-radius: 50% 50% 35% 35% / 70% 70% 30% 30%;
+      z-index: 2;
+      filter: brightness(0.92);
+    }
+
+    /* Pétalo Izquierdo */
+    .petal-left {
+      position: absolute;
+      bottom: 2px;
+      left: 5px;
+      width: calc(var(--flower-w, 52px) * 0.62);
+      height: calc(var(--flower-h, 64px) * 0.96);
+      background: linear-gradient(135deg, var(--tulip-bright-gold) 5%, var(--tulip-vibrant-yellow) 40%, var(--tulip-body-yellow) 75%, var(--tulip-shadow-amber) 100%);
+      border-radius: 65% 35% 30% 70% / 75% 30% 70% 25%;
+      transform-origin: bottom center;
+      transform: rotate(-14deg);
+      z-index: 3;
+      box-shadow: inset -2px -2px 6px rgba(160, 75, 0, 0.4), inset 2px 3px 6px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Pétalo Derecho */
+    .petal-right {
+      position: absolute;
+      bottom: 2px;
+      right: 5px;
+      width: calc(var(--flower-w, 52px) * 0.62);
+      height: calc(var(--flower-h, 64px) * 0.96);
+      background: linear-gradient(-135deg, var(--tulip-bright-gold) 5%, var(--tulip-vibrant-yellow) 40%, var(--tulip-body-yellow) 75%, var(--tulip-shadow-amber) 100%);
+      border-radius: 35% 65% 70% 30% / 30% 75% 25% 70%;
+      transform-origin: bottom center;
+      transform: rotate(14deg);
+      z-index: 4;
+      box-shadow: inset 2px -2px 6px rgba(160, 75, 0, 0.4), inset -2px 3px 6px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Pétalo Frontal Dominante */
+    .petal-front {
+      position: absolute;
+      bottom: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(var(--flower-w, 52px) * 0.66);
+      height: calc(var(--flower-h, 64px) * 0.93);
+      background: radial-gradient(ellipse at 50% 30%, var(--tulip-bright-gold) 0%, var(--tulip-vibrant-yellow) 40%, var(--tulip-body-yellow) 75%, var(--tulip-shadow-amber) 100%);
+      border-radius: 50% 50% 45% 45% / 75% 75% 25% 25%;
+      z-index: 5;
+      box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.2),
+        inset 0 -5px 9px rgba(175, 75, 0, 0.45),
+        inset 0 3px 5px rgba(255, 255, 255, 0.7);
+    }
+
+    .petal-front::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* Simula las estrías o textura longitudinal típica de los tulipanes */
+      background: repeating-linear-gradient(
+        to right,
+        rgba(255,255,255,0.0) 0%,
+        rgba(255,255,255,0.06) 50%,
+        rgba(255,255,255,0.0) 100%
+      );
+      background-size: 8px 100%;
+      border-radius: inherit;
+      pointer-events: none;
+      
+    }
+
+    /* Gota de Rocío Brillante */
+    .dew-drop {
+      position: absolute;
+      top: 34%;
+      right: 22%;
+      width: 4px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50% 50% 60% 60%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset -0.5px -0.5px 1px rgba(0, 0, 0, 0.4);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    /* Halo Cálido / Bioluminiscencia */
+    .tulip-glow-halo {
+      position: absolute;
+      inset: -15px;
+      background: radial-gradient(circle, var(--tulip-sunlight-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      opacity: 0.65;
+      pointer-events: none;
+      z-index: 1;
+      animation: glowBreathe 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes glowBreathe {
+      0% { transform: scale(0.9); opacity: 0.4; }
+      100% { transform: scale(1.18); opacity: 0.9; }
+    }
+
+
+    /* BRILLITOS Y DESTELLOS MÁGICOS */
+    .flower-sparkles-field {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 17;
+      overflow: hidden;
+    }
+
+    .magic-sparkle {
+      position: absolute;
+      width: var(--size, 5px);
+      height: var(--size, 5px);
+      background: var(--sparkle-core);
+      border-radius: 50%;
+      box-shadow: 
+        0 0 6px var(--sparkle-glow),
+        0 0 14px var(--sparkle-glow),
+        0 0 24px var(--sparkle-aura);
+      animation: riseFromFlowers var(--speed, 11s) cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite,
+                 sparkleTwinkle calc(var(--speed, 11s) / 5) ease-in-out infinite alternate;
+      animation-delay: var(--delay, 0s);
+      opacity: 0;
+    }
+
+    @keyframes riseFromFlowers {
+      0% {
+        transform: translate(calc(var(--x, 50vw)), calc(var(--origin-y, 85vh))) scale(0.4);
+        opacity: 0;
+      }
+      15% {
+        opacity: var(--max-op, 0.95);
+        transform: translate(calc(var(--x, 50vw) + 2vw), calc(var(--origin-y, 85vh) - 15vh)) scale(1.1);
+      }
+      65% {
+        opacity: var(--max-op, 0.95);
+        transform: translate(calc(var(--x, 50vw) + 12vw), calc(var(--origin-y, 85vh) - 55vh)) scale(0.9);
+      }
+      100% {
+        transform: translate(calc(var(--x, 50vw) + 22vw), calc(var(--origin-y, 85vh) - 85vh)) scale(0.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sparkleTwinkle {
+      0% {
+        filter: brightness(0.9) drop-shadow(0 0 3px var(--sparkle-glow));
+      }
+      100% {
+        filter: brightness(1.6) drop-shadow(0 0 10px var(--sparkle-glow));
+      }
+    }
+
+    /* CÉSPED */
+    .grass-field {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 95px;
+      pointer-events: none;
+      z-index: 14;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .grass-item {
+      width: var(--gw, 3.5px);
+      height: var(--gh, 65px);
+      background: linear-gradient(to top, #142813, #3a622a, #6aa04e);
+      border-radius: 90% 0 0 0;
+      transform-origin: bottom center;
+      transform: rotate(var(--gr, 5deg));
+      animation: grassSway calc(var(--gd, 3.2s) / var(--wind-speed-mult)) ease-in-out infinite alternate;
+      animation-delay: var(--gdel, 0s);
+    }
+
+    @keyframes grassSway {
+      0% { transform: rotate(calc(var(--gr, 5deg) - 6deg)); }
+      100% { transform: rotate(calc(var(--gr, 5deg) + 8deg)); }
+    }
+
+    
+    /* ==========================================================================
+       TULIPÁN CENTRAL PROTAGONISTA & LISTÓN AMARILLO (PORTAL A NUESTRA HISTORIA)
+       ========================================================================== */
+    .hero-tulip {
+      position: absolute;
+      bottom: 30px !important;
+      left: 50% !important;
+      transform-origin: bottom center;
+      transform: translateX(-50%) scale(1.55);
+      z-index: 35 !important;
+      cursor: default;
+      filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 16px rgba(255, 210, 60, 0.55));
+      animation: heroTulipSway 5.5s ease-in-out infinite alternate;
+      transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), filter 0.3s ease;
+    }
+
+    .hero-tulip:hover {
+      transform: translateX(-50%) scale(1.72) rotate(4deg) !important;
+      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 25px rgba(255, 220, 80, 0.85));
+    }
+
+    @keyframes heroTulipSway {
+      0% { transform: translateX(-50%) scale(1.55) rotate(-2deg); }
+      100% { transform: translateX(-50%) scale(1.55) rotate(3deg); }
+    }
+
+    /* Listón Amarillo Satinado Vectorial (SVG) */
+    .yellow-ribbon-container {
+      position: absolute;
+      top: 25px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 75px;
+      height: 65px;
+      pointer-events: auto;
+      z-index: 12;
+      transition: transform 0.3s ease;
+    }
+
+    .hero-tulip:hover .yellow-ribbon-container {
+      transform: translate(-50%, -50%) scale(1.18);
+    }
+
+    .yellow-ribbon-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .ribbon-wing-l {
+      transform-origin: 47px 28px;
+      animation: ribbonWingL 3.6s ease-in-out infinite alternate;
+    }
+
+    .ribbon-wing-r {
+      transform-origin: 53px 28px;
+      animation: ribbonWingR 3.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes ribbonWingL {
+      0% { transform: rotate(0deg) scale(0.98); }
+      100% { transform: rotate(-5deg) scale(1.02); }
+    }
+
+    @keyframes ribbonWingR {
+      0% { transform: rotate(0deg) scale(0.98); }
+      100% { transform: rotate(5deg) scale(1.02); }
+    }
+
+    .ribbon-tail-l {
+      transform-origin: 47px 36px;
+      animation: ribbonTailL 4s ease-in-out infinite alternate;
+    }
+
+    .ribbon-tail-r {
+      transform-origin: 53px 36px;
+      animation: ribbonTailR 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes ribbonTailL {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-6deg); }
+    }
+
+    @keyframes ribbonTailR {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(6deg); }
+    }
+
+    /* Cartelito flotante romántico: '💛 Presiona aquí 💛' */
+    .story-badge {
+      position: absolute;
+      top: -42px; /* Justo sobre la flor central */
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(18, 28, 45, 0.90);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid #fed070;
+      padding: 7px 16px;
+      border-radius: 24px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 208, 0, 0.65);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #fff;
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      pointer-events: auto;
+      cursor: pointer;
+      animation: badgeFloat 3.2s ease-in-out infinite alternate;
+      transition: all 0.25s ease;
+    }
+
+    .story-badge .heart-icon {
+      font-size: 0.95rem;
+      display: inline-block;
+      animation: heartBeat 1.8s ease-in-out infinite;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.22); filter: drop-shadow(0 0 6px #ffd000); }
+    }
+
+    .story-badge:hover {
+      background: linear-gradient(135deg, #f59e0b, #ffd000);
+      color: #0c1930;
+      border-color: #fff;
+      transform: translateX(-50%) scale(1.10);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.55), 0 0 24px rgba(255, 215, 0, 0.95);
+    }
+
+    @keyframes badgeFloat {
+      0% { transform: translateX(-50%) translateY(0); }
+      100% { transform: translateX(-50%) translateY(-7px); }
+    }
+
+        /* REPRODUCTOR DE MÚSICA */
+    .music-player-bar {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(18, 28, 45, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 215, 120, 0.3);
+      padding: 10px 20px;
+      border-radius: 40px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 180, 50, 0.25);
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .music-player-bar:hover {
+      background: rgba(18, 28, 45, 0.9);
+      border-color: rgba(255, 215, 120, 0.55);
+      box-shadow: 0 14px 42px rgba(0, 0, 0, 0.55), 0 0 26px rgba(255, 180, 50, 0.4);
+    }
+
+    .vinyl-disc {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffb703 18%, #111 20%, #222 65%, #ffb703 68%, #000 100%);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .vinyl-disc.spinning {
+      animation: spinVinyl 4s linear infinite;
+    }
+
+    @keyframes spinVinyl {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .vinyl-center {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #fed070;
+    }
+
+    .music-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .music-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffdda1;
+      letter-spacing: 0.3px;
+    }
+
+    .music-artist {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+    }
+
+    .btn-play-pause {
+      background: linear-gradient(135deg, #f08c00, #ffb703);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: #0c1829;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(255, 183, 3, 0.55);
+      transition: all 0.2s ease;
+    }
+
+    .btn-play-pause:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 18px rgba(255, 183, 3, 0.8);
+    }
+
+    /* CONTROLES Y MODAL */
+    .ui-controls {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 50;
+      background: rgba(14, 25, 42, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 15px 18px;
+      border-radius: 14px;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      max-width: 300px;
+    }
+
+    .ui-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffd233;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .ui-desc {
+      font-size: 0.75rem;
+      color: #cbd5e1;
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .theme-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #e2e8f0;
+      padding: 6px 8px;
+      border-radius: 7px;
+      font-size: 0.76rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .theme-btn:hover {
+      background: rgba(255, 210, 50, 0.22);
+      border-color: #ffd233;
+      color: #fff;
+    }
+
+    .theme-btn.active {
+      background: linear-gradient(135deg, #e57600, #ffcf0a);
+      color: #0c1829;
+      font-weight: 700;
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 207, 10, 0.45);
+    }
+
+    .slider-box {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slider-box label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .slider-box input {
+      flex: 1;
+      accent-color: #ffcf0a;
+      cursor: pointer;
+    }
+
+    .btn-open-story {
+      margin-top: 10px;
+      width: 100%;
+      background: linear-gradient(135deg, #2f5424, #487836);
+      border: 1px solid #7cb560;
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+      transition: all 0.25s ease;
+    }
+
+    .btn-open-story:hover {
+      background: linear-gradient(135deg, #3d6e2e, #5a9443);
+      transform: translateY(-1px);
+    }
+
+    /* MODAL DE HISTORIA */
+    .story-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 10, 18, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .story-overlay.active {
+      display: flex;
+      animation: modalIn 0.35s ease-out;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .story-parchment {
+      background: #faf6ee;
+      color: #2c251e;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      padding: 36px 40px;
+      overflow-y: auto;
+      position: relative;
+      border: 1px solid #e2d7c5;
+      line-height: 1.7;
+      font-family: 'Georgia', serif;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: #665b4f;
+      cursor: pointer;
+      font-family: sans-serif;
+    }
+
+    .close-btn:hover { color: #a43a18; }
+    .story-parchment h1 { font-size: 1.55rem; color: #7a4f09; text-align: center; margin-bottom: 4px; }
+    .story-parchment h2 { font-size: 0.95rem; color: #8c7355; text-align: center; font-weight: normal; font-style: italic; margin-bottom: 24px; }
+    .story-parchment h3 { font-size: 1.1rem; color: #4b6638; margin: 22px 0 8px 0; border-bottom: 1px solid #e7dcce; padding-bottom: 4px; }
+    .story-parchment p { font-size: 0.96rem; margin-bottom: 14px; text-align: justify; color: #3b332a; }
+
+    .story-quote {
+      margin-top: 26px;
+      padding: 18px 22px;
+      background: #f1ebd9;
+      border-left: 4px solid #f5ab00;
+      border-radius: 6px;
+      font-style: italic;
+    }
+
+    .story-quote strong { color: #844c00; font-style: normal; }
+
+    #ytPlayerContainer {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+  
+    /* PORTAL DE ENTRADA / BIENVENIDA CON MÚSICA GARANTIZADA */
+    .welcome-portal {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(10, 16, 28, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      padding: 20px;
+    }
+
+    .welcome-portal.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .portal-card {
+      background: rgba(20, 31, 51, 0.88);
+      border: 1.5px solid rgba(255, 208, 0, 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(255, 200, 50, 0.35);
+      padding: 34px 44px;
+      border-radius: 26px;
+      text-align: center;
+      color: #fff;
+      max-width: 420px;
+      animation: portalCardIn 0.7s ease-out;
+    }
+
+    @keyframes portalCardIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .portal-flower {
+      font-size: 3.2rem;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: flowerPulse 2.2s infinite ease-in-out;
+    }
+
+    @keyframes flowerPulse {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(255,208,0,0.4)); }
+      50% { transform: scale(1.16); filter: drop-shadow(0 0 16px rgba(255,208,0,0.9)); }
+    }
+
+    .portal-title {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fed070;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .portal-sub {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      margin-bottom: 24px;
+      line-height: 1.45;
+    }
+
+    .portal-btn {
+      background: linear-gradient(135deg, #f59e0b, #ffd000);
+      border: none;
+      color: #0c1930;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 12px 30px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(245, 158, 11, 0.55);
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .portal-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 6px 24px rgba(255, 208, 0, 0.85);
+    }
+
+  
+    /* ==========================================================================
+       OPTIMIZACIÓN MÓVIL RESPONSIVE
+       ========================================================================== */
+    @media (max-width: 768px) {
+      .mountains-container {
+        bottom: 24%;
+        height: 20%; /* Curvas de montaña suaves y bajas */
+      }
+
+      .meadow-back { height: 30%; border-radius: 0; }
+      .meadow-mid { height: 22%; border-radius: 0; }
+      .meadow-front { height: 14%; border-radius: 0; bottom: 0; }
+      
+      .grass-field { height: 95px; }
+
+      .sun-light-system {
+        top: 14%;
+        right: 18%;
+        width: 320px;
+        height: 320px;
+      }
+      .sun-core { width: 90px; height: 90px; }
+      .sun-rays { width: 540px; height: 540px; }
+
+      .music-player-bar {
+        top: 14px;
+        padding: 7px 16px;
+        gap: 10px;
+        max-width: 92vw;
+      }
+      .music-title { font-size: 0.78rem; }
+      .music-artist { font-size: 0.66rem; }
+      .vinyl-disc { width: 32px; height: 32px; }
+      .btn-play-pause { width: 32px; height: 32px; font-size: 0.85rem; }
+
+      /* El cartel descansa justo sobre la flor central */
+      .story-badge {
+        font-size: 0.82rem;
+        padding: 7px 15px;
+        top: -46px !important;
+      }
+
+      /* Tulipán central protagonista grande y presente en primer plano */
+      .hero-tulip {
+        bottom: 15px !important;
+        transform: translateX(-50%) scale(1.48) !important;
+      }
+
+      .hero-tulip:hover {
+        transform: translateX(-50%) scale(1.60) rotate(4deg) !important;
+      }
+
+      .story-parchment {
+        padding: 26px 22px;
+        max-height: 90vh;
+      }
+      .story-parchment h1 { font-size: 1.3rem; }
+      .story-parchment p { font-size: 0.88rem; line-height: 1.6; }
+    }
+
+  </style>
+</head>
+<body data-theme="sunset">
+  <!-- PORTAL DE ENTRADA CON MÚSICA AUTOMÁTICA -->
+  <div id="welcomePortal" class="welcome-portal" onclick="enterExperience()">
+    <div class="portal-card">
+      <div class="portal-flower">🌷</div>
+      <h2 class="portal-title">Un detalle para ti</h2>
+      <p class="portal-sub">Toca en cualquier parte para entrar al valle y escuchar la música</p>
+      <button class="portal-btn" onclick="enterExperience(); event.stopPropagation();">
+        <span>✨</span> Entrar al Valle <span>✨</span>
+      </button>
+    </div>
+  </div>
+
+
+  <div class="viewport">
+    <div class="sky"></div>
+
+    <div class="sun-light-system" id="sunSystem">
+      <div class="sun-rays"></div>
+      <div class="sun-core"></div>
+    </div>
+    <div class="ambient-sun-glow"></div>
+
+    <!-- MONTAÑAS ONDULADAS -->
+    <div class="mountains-container">
+      <div class="mountains-far">
+        <svg viewBox="0 0 1600 500" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="mtnFarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="var(--mtn-far-top)"/>
+              <stop offset="100%" stop-color="var(--mtn-far-bot)"/>
+            </linearGradient>
+          </defs>
+          <path d="M 0,500 L 0,340 
+                   C 250,300 500,320 800,285 
+                   C 1100,250 1380,295 1600,310 
+                   L 1600,500 Z" 
+                fill="url(#mtnFarGrad)"/>
+        </svg>
+      </div>
+
+      <div class="mountains-mid">
+        <svg viewBox="0 0 1600 450" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="mtnMidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="var(--mtn-mid-top)"/>
+              <stop offset="100%" stop-color="var(--mtn-mid-bot)"/>
+            </linearGradient>
+          </defs>
+          <path d="M 0,450 L 0,300 
+                   C 300,265 650,290 950,255 
+                   C 1250,235 1450,270 1600,285 
+                   L 1600,450 Z" 
+                fill="url(#mtnMidGrad)"/>
+        </svg>
+      </div>
+
+      <div class="valley-mist"></div>
+
+      <div class="mountains-near">
+        <svg viewBox="0 0 1600 350" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="mtnNearGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="var(--mtn-near-top)"/>
+              <stop offset="100%" stop-color="var(--mtn-near-bot)"/>
+            </linearGradient>
+          </defs>
+          <path d="M 0,350 L 0,230 
+                   C 350,190 750,215 1100,180 
+                   C 1350,170 1500,195 1600,205 
+                   L 1600,350 Z" 
+                fill="url(#mtnNearGrad)"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Terreno de Pradera -->
+    <div class="meadow-back"></div>
+    <div class="meadow-mid"></div>
+    <div class="meadow-front"></div>
+
+    <!-- BOSQUE DE TULIPANES CON PÉTALOS NÍFIDOS Y 5 VARIEDADES -->
+    <div class="tulip-forest-container" id="forestContainer"></div>
+
+    <!-- CÉSPED -->
+    <div class="grass-field" id="grassField"></div>
+
+    <!-- BRILLITOS Y DESTELLOS MÁGICOS -->
+    <div class="flower-sparkles-field" id="sparklesField"></div>
+
+    <!-- REPRODUCTOR FLOTANTE "LUST FOR LIFE" -->
+    <div class="music-player-bar" id="musicPlayerBar">
+      <div class="vinyl-disc" id="vinylDisc">
+        <div class="vinyl-center"></div>
+      </div>
+      <div class="music-info">
+        <span class="music-title">Lust for Life</span>
+        <span class="music-artist">Lana Del Rey ft. The Weeknd</span>
+      </div>
+      <button class="btn-play-pause" id="btnPlayPause" onclick="toggleAudioTrack()" title="Reproducir / Pausar">
+        ▶
+      </button>
+    </div>
+
+    <audio id="localAudio" loop preload="auto">
+      <source src="lust_for_life.mp3" type="audio/mpeg">
+      <source src="https://archive.org/download/03-13-beaches/02%20Lust%20for%20Life.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="ytPlayerContainer">
+      <div id="ytPlayer"></div>
+    </div>
+
+
+  </div>
+
+  <!-- MODAL DE HISTORIA DE DAVID Y ATENEA -->
+  <div class="story-overlay" id="storyOverlay" onclick="backdropClose(event)">
+    <div class="story-parchment">
+      <button class="close-btn" onclick="showStory(false)" title="Cerrar">✕</button>
+      
+      <h1>💛 Atenea, amor de mi vida 💛</h1>
+      <h2>El día de hoy voy a contarte una pequeña historia</h2>
+
+      <p>David se encontraba caminando por el viejo camino al pueblo. Estaba cansado, tenía sed y solo contaba con una pequeña libreta y un lápiz gastado. Cansado del camino, no le quedó más que sentarse en una pequeña roca a la orilla del camino, sabiendo que quizá tendría que caminar otro par de horas. Cerró los ojos durante no más de tres minutos, hasta que la brisa del viento voló su libreta; el viento la llevaba hasta que en un momento no pudo más que arrancar una hoja. Al levantarse, vio que se había alejado del camino.</p>
+
+      <p>En el tranquilo atardecer, vislumbró a lo lejos a una chica: su cabello ondeaba en el viento y estaba sentada en un campo de tulipanes. Su hermosa figura creaba una vista armoniosa y perfecta. La chica observaba a lo lejos el atardecer, y solo tenía una pequeña flor en su cabello. David, desde la distancia, solo trató de dibujar lo que tenía enfrente admirando su lápiz; y sus movimientos eran dignos de alguien que no sabe dibujar. En un momento, al terminar su “obra maestra”, solo suspiró diciendo: «No sirvo para esto», se recostó sobre el suelo y cerró los ojos.</p>
+
+      <p>Al cabo de un momento, una pequeña sombra apareció sobre su cabeza. Abrió los ojos y vio los ojos más hermosos que haya visto nunca: aquella chica estaba sobre él. Nervioso, se levantó de un salto; la chica solo rió un poco y él, nervioso, apartó la mirada. La chica le señaló el papel en su mano y él rápidamente lo movió detrás de su espalda diciendo: «No es nada». A lo que la chica le toca la mano, lo que ruboriza a David; y aflojando su agarre, ella toma el papel y dice: «Parece que tengo un admirador».</p>
+
+      <p>La cara de David se tornó roja al instante diciendo: «Perdona, sé que no es un buen dibujo». Antes de que David terminara de explicarse, ella dijo: «Pues a mí me gusta». David, con tono apenado, pregunta: «¿En serio?», a lo que la chica con una pequeña risita dice: «Sí», y le da un pequeño beso en la mejilla.</p>
+
+      <p>David, ruborizado, solo ve lo que tiene enfrente; no puede creer si es un sueño o si está muerto y recibe la bienvenida al cielo. David recupera la compostura y dice: «¿Puedo saber tu nombre? Porque creo que he decidido el nombre que quiero guardar en mi corazón por el resto de mi vida».</p>
+
+      <p style="text-align: center; font-size: 1.25rem; font-weight: bold; color: #b45309; margin: 24px 0 16px 0;">La chica respondió… Atenea.</p>
+
+      <div class="story-quote">
+        <p style="margin-bottom: 8px;"><strong>Para ti con todo mi cariño:</strong></p>
+        <p style="margin-bottom: 10px;">Espero te guste la historia, mi amor. Te la hice con todo mi amor y cariño porque cada vez que pienso en ti, pienso en esa clase de luz: la que no hace ruido, pero lo cambia todo; la que devuelve la calma en los días nublados y hace que cualquier lugar se sienta como un hogar seguro.</p>
+        <p style="margin-bottom: 8px;"><strong>Feliz 21 de septiembre. Este bosque de tulipanes amarillos florece hoy, y siempre, para ti.</strong></p>
+        <p style="margin-bottom: 0;"><strong>Te ama tu esposo, David. 💛</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const forest = document.getElementById('forestContainer');
+    const grassContainer = document.getElementById('grassField');
+    const sparklesContainer = document.getElementById('sparklesField');
+
+    /* ==========================================================================
+       GENERACIÓN ADAPTATIVA OPTIMIZADA PARA CELULAR Y DESKTOP
+       ========================================================================== */
+    const isMobile = window.innerWidth <= 768;
+
+    // Perspectiva inmersiva: frente grande y detallado, fondo profundo y rico
+    const depthLayers = isMobile ? [
+      { name: 'deep-back', count: 26, scale: [0.32, 0.46], bottom: [130, 210], z: 8,  blur: '1.0px' },
+      { name: 'mid-back',  count: 22, scale: [0.52, 0.72], bottom: [80, 150],  z: 10, blur: '0.4px' },
+      { name: 'mid-front', count: 16, scale: [0.78, 1.02], bottom: [40, 95],   z: 13, blur: '0px' },
+      { name: 'foreground',count: 10, scale: [1.18, 1.45], bottom: [2, 45],    z: 18, blur: '0px' }
+    ] : [
+      { name: 'deep-back', count: 40, scale: [0.35, 0.50], bottom: [165, 255], z: 8,  blur: '1.0px' },
+      { name: 'mid-back',  count: 34, scale: [0.55, 0.75], bottom: [110, 185], z: 10, blur: '0.4px' },
+      { name: 'mid-front', count: 26, scale: [0.80, 1.05], bottom: [60, 130],  z: 13, blur: '0px' },
+      { name: 'foreground',count: 16, scale: [1.20, 1.50], bottom: [5, 55],    z: 18, blur: '0px' }
+    ];
+
+    
+    let stemCounter = 0;
+
+    function getBotanicalStemAndLeavesSVG(uid) {
+      return `
+        <svg class="botanical-stem-leaf-svg" viewBox="0 0 120 280" preserveAspectRatio="none">
+          <defs>
+            <!-- Degradado cilíndrico de volumen del tallo con luz lateral -->
+            <linearGradient id="${uid}_stemCyl" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#2a4515"/>
+              <stop offset="30%" stop-color="#7ab442"/>
+              <stop offset="68%" stop-color="#4e7c2a"/>
+              <stop offset="100%" stop-color="#243b12"/>
+            </linearGradient>
+
+            <!-- Cuello superior marrón rojizo / oliva oscuro idéntico a la foto -->
+            <linearGradient id="${uid}_stemNeck" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#462214"/>
+              <stop offset="28%" stop-color="#562e1a"/>
+              <stop offset="55%" stop-color="#4e441e"/>
+              <stop offset="85%" stop-color="#466f26"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </linearGradient>
+
+            <!-- Hoja izquierda - lado iluminado y aterciopelado -->
+            <linearGradient id="${uid}_leafL_light" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#88c24e"/>
+              <stop offset="45%" stop-color="#609436"/>
+              <stop offset="100%" stop-color="#3d6820"/>
+            </linearGradient>
+
+            <!-- Hoja izquierda - lado sombreado con quilla tridimensional -->
+            <linearGradient id="${uid}_leafL_dark" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#55862e"/>
+              <stop offset="50%" stop-color="#3d6220"/>
+              <stop offset="100%" stop-color="#284414"/>
+            </linearGradient>
+
+            <!-- Hoja derecha - lado iluminado -->
+            <linearGradient id="${uid}_leafR_light" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#90ca52"/>
+              <stop offset="45%" stop-color="#659b3a"/>
+              <stop offset="100%" stop-color="#3f6c24"/>
+            </linearGradient>
+
+            <!-- Hoja derecha - lado sombreado -->
+            <linearGradient id="${uid}_leafR_dark" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#588a32"/>
+              <stop offset="50%" stop-color="#3e6422"/>
+              <stop offset="100%" stop-color="#264214"/>
+            </linearGradient>
+          </defs>
+
+          <!-- TALLO ESBELTO REALISTA -->
+          <path d="M 58,4 L 62,4 L 63.6,278 L 56.4,278 Z" fill="url(#${uid}_stemCyl)"/>
+          <path d="M 58,4 L 62,4 L 62.8,110 L 57.2,110 Z" fill="url(#${uid}_stemNeck)"/>
+
+          <!-- HOJA IZQUIERDA ENVOLVENTE EN FORMA DE S (FOTO REAL) -->
+          <g class="leaf-anim-left">
+            <!-- Quilla en sombra -->
+            <path d="M 58.5,276 
+                     C 56,228 45,178 33,136 
+                     C 25,108 19,84 15,66 
+                     C 18,84 27,116 35,143 
+                     C 47,186 56,232 58.5,276 Z" 
+                  fill="url(#${uid}_leafL_dark)"/>
+            <!-- Cara iluminada curvada que abraza el tallo -->
+            <path d="M 58.5,276 
+                     C 59.5,224 57,173 47,133 
+                     C 39,98 27,76 15,66 
+                     C 24,86 37,120 46,154 
+                     C 56,193 58,236 58.5,276 Z" 
+                  fill="url(#${uid}_leafL_light)"/>
+            <!-- Nervadura central nítida -->
+            <path d="M 58.5,276 C 58,225 50,176 39,134 C 29,102 21,80 15,66" 
+                  stroke="rgba(215, 255, 160, 0.5)" stroke-width="0.9" fill="none"/>
+          </g>
+
+          <!-- HOJA DERECHA ENVOLVENTE ACANALADA (FOTO REAL) -->
+          <g class="leaf-anim-right">
+            <!-- Lado posterior en sombra -->
+            <path d="M 60,278 
+                     C 61,226 64,180 72,140 
+                     C 80,103 92,84 105,72 
+                     C 95,90 85,116 77,148 
+                     C 67,190 63,236 60,278 Z" 
+                  fill="url(#${uid}_leafR_dark)"/>
+            <!-- Cara frontal iluminada -->
+            <path d="M 60,278 
+                     C 63,230 70,184 80,144 
+                     C 88,112 97,92 105,72 
+                     C 99,98 91,128 82,160 
+                     C 72,200 64,240 60,278 Z" 
+                  fill="url(#${uid}_leafR_light)"/>
+            <!-- Nervadura central de la hoja derecha -->
+            <path d="M 60,278 C 62,228 67,182 76,142 C 84,107 96,88 105,72" 
+                  stroke="rgba(220, 255, 170, 0.5)" stroke-width="0.9" fill="none"/>
+          </g>
+
+          <!-- Vaina basal envolvente que une hojas al tallo -->
+          <path d="M 55.5,250 C 58,245 62,245 64.5,250 L 64.5,278 L 55.5,278 Z" fill="#6ba038" opacity="0.92"/>
+        </svg>
+      `;
+    }
+
+    function createTulip(xPos, layer) {
+      const el = document.createElement('div');
+      el.className = 'tulip';
+
+      // Variabilidad botánica individual orgánica con dispersión de alturas
+      const scale = (Math.random() * (layer.scale[1] - layer.scale[0]) + layer.scale[0]).toFixed(2);
+      
+      // Variar altura del suelo con relieve orgánico
+      const verticalJitter = Math.floor(Math.random() * 30 - 15);
+      const bottom = Math.max(15, Math.floor(Math.random() * (layer.bottom[1] - layer.bottom[0]) + layer.bottom[0] + verticalJitter));
+      
+      const duration = (Math.random() * 2.2 + 3.2).toFixed(2);
+      const delay = (Math.random() * -5.0).toFixed(2);
+      const restTilt = (Math.random() * 14 - 7).toFixed(1);
+      
+      // Alturas y tamaños con proporción inmersiva
+      const stemH = Math.floor(Math.random() * 50 + 175); 
+      const stemW = Math.floor(Math.random() * 2 + 5);
+      
+      // La flor tiene presencia real (escalada por layer.scale)
+      const flowerH = Math.floor(Math.random() * 12 + 58);
+      const flowerW = Math.floor(flowerH * 0.82);
+      const flex = (Math.random() * 0.6 + 0.7).toFixed(2);
+
+      el.style.setProperty('--scale', scale);
+      el.style.setProperty('--bottom', `${bottom}px`);
+      el.style.setProperty('--left', `${xPos}%`);
+      el.style.setProperty('--duration', `${duration}s`);
+      el.style.setProperty('--delay', `${delay}s`);
+      el.style.setProperty('--rest-tilt', `${restTilt}deg`);
+      el.style.setProperty('--stem-h', `${stemH}px`);
+      el.style.setProperty('--stem-w', `${stemW}px`);
+      el.style.setProperty('--flower-h', `${flowerH}px`);
+      el.style.setProperty('--flower-w', `${flowerW}px`);
+      el.style.setProperty('--flexibility', flex);
+      el.style.setProperty('--z', layer.z);
+
+      if (layer.blur !== '0px') {
+        el.style.filter = `blur(${layer.blur}) drop-shadow(0 10px 8px rgba(0,0,0,0.25))`;
+      }
+
+      stemCounter++;
+      const uid = `stem_${stemCounter}`;
+
+      // Estructura DOM botánica ultra realista
+      el.innerHTML = `
+        <div class="tulip-stem">
+          ${getBotanicalStemAndLeavesSVG(uid)}
+          <div class="tulip-flower">
+            <div class="tulip-glow-halo"></div>
+            <div class="flower-calyx"></div>
+            <div class="petal-back"></div>
+            <div class="petal-left"></div>
+            <div class="petal-right"></div>
+            <div class="petal-front">
+              <div class="dew-drop"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Interacción táctil o clic
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerTulipSway(el);
+      });
+
+      return el;
+    }
+
+    function triggerTulipSway(tulipEl) {
+      tulipEl.style.transform = `scale(1.25) rotate(18deg)`;
+      setTimeout(() => {
+        tulipEl.style.transform = `scale(1.0) rotate(-10deg)`;
+        setTimeout(() => {
+          tulipEl.style.transform = '';
+        }, 350);
+      }, 250);
+    }
+
+    // Poblado distribuido orgánico con cobertura completa
+    depthLayers.forEach(layer => {
+      for (let i = 0; i < layer.count; i++) {
+        const basePct = (i / layer.count) * 110 - 5;
+        const jitter = (Math.random() * 8 - 4);
+        const xPos = Math.max(-4, Math.min(104, basePct + jitter));
+        const tulip = createTulip(xPos, layer);
+        forest.appendChild(tulip);
+      }
+    });
+
+    // Crear el Tulipán Central Protagonista con el Listón Amarillo
+    function createHeroStoryTulip() {
+      const el = document.createElement('div');
+      el.className = 'tulip hero-tulip';
+      el.id = 'heroStoryTulip';
+
+      const isMob = window.innerWidth <= 768;
+      const stemH = isMob ? 210 : 230;
+      const stemW = 8;
+      const flowerH = isMob ? 72 : 78;
+      const flowerW = Math.floor(flowerH * 0.82);
+
+      el.style.setProperty('--scale', '1');
+      el.style.setProperty('--duration', '5.5s');
+      el.style.setProperty('--stem-h', `${stemH}px`);
+      el.style.setProperty('--stem-w', `${stemW}px`);
+      el.style.setProperty('--flower-h', `${flowerH}px`);
+      el.style.setProperty('--flower-w', `${flowerW}px`);
+      el.style.setProperty('--flexibility', '0.6');
+
+      const heroUid = 'hero_stem';
+
+      el.innerHTML = `
+        <div class="tulip-stem">
+          ${getBotanicalStemAndLeavesSVG(heroUid)}
+
+          <!-- Listón Amarillo Satinado Vectorial Realista -->
+          <div class="yellow-ribbon-container" title="Presiona aquí">
+            <svg class="yellow-ribbon-svg" viewBox="0 0 100 85">
+              <defs>
+                <linearGradient id="ribbonGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fff8b5"/>
+                  <stop offset="35%" stop-color="#ffd000"/>
+                  <stop offset="70%" stop-color="#f59e0b"/>
+                  <stop offset="100%" stop-color="#b45309"/>
+                </linearGradient>
+                <linearGradient id="ribbonDark" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#b45309"/>
+                  <stop offset="100%" stop-color="#78350f"/>
+                </linearGradient>
+                <radialGradient id="knotGold" cx="35%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#fffae0"/>
+                  <stop offset="40%" stop-color="#ffd000"/>
+                  <stop offset="85%" stop-color="#d97706"/>
+                  <stop offset="100%" stop-color="#92400e"/>
+                </radialGradient>
+                <filter id="ribbonShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(70, 25, 0, 0.45)"/>
+                </filter>
+              </defs>
+              <g filter="url(#ribbonShadow)">
+                <!-- Cinta posterior que rodea el tallo -->
+                <path d="M 42,26 Q 50,30 58,26 Q 58,34 50,37 Q 42,34 42,26 Z" fill="#b45309"/>
+                <!-- Cola izquierda con corte en V -->
+                <path class="ribbon-tail-l" d="M 46,36 C 42,46 36,58 32,74 L 40,68 L 47,72 C 48,58 50,46 49,36 Z" fill="url(#ribbonGold)" stroke="#d97706" stroke-width="0.7"/>
+                <path d="M 45,39 C 41,49 37,60 34,70" stroke="rgba(255,255,255,0.75)" stroke-width="1.2" fill="none"/>
+                <!-- Cola derecha con corte en V -->
+                <path class="ribbon-tail-r" d="M 54,36 C 58,46 64,58 68,74 L 60,68 L 53,72 C 52,58 50,46 51,36 Z" fill="url(#ribbonGold)" stroke="#d97706" stroke-width="0.7"/>
+                <path d="M 55,39 C 59,49 63,60 66,70" stroke="rgba(255,255,255,0.75)" stroke-width="1.2" fill="none"/>
+                <!-- Fondo 3D oscuro de los lazos -->
+                <ellipse cx="28" cy="24" rx="10" ry="7" transform="rotate(-15 28 24)" fill="url(#ribbonDark)"/>
+                <ellipse cx="72" cy="24" rx="10" ry="7" transform="rotate(15 72 24)" fill="url(#ribbonDark)"/>
+                <!-- Bucle u oreja izquierda de raso -->
+                <path class="ribbon-wing-l" d="M 46,28 C 38,18 20,8 10,20 C 4,28 12,38 26,36 C 36,34 44,32 47,30 Z" fill="url(#ribbonGold)" stroke="#d97706" stroke-width="0.8"/>
+                <path d="M 12,21 C 20,13 36,20 45,28" stroke="rgba(255,255,255,0.85)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <!-- Bucle u oreja derecha de raso -->
+                <path class="ribbon-wing-r" d="M 54,28 C 62,18 80,8 90,20 C 96,28 88,38 74,36 C 64,34 56,32 53,30 Z" fill="url(#ribbonGold)" stroke="#d97706" stroke-width="0.8"/>
+                <path d="M 88,21 C 80,13 64,20 55,28" stroke="rgba(255,255,255,0.85)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <!-- Nudo central satinado -->
+                <path d="M 43,23 C 43,19 57,19 57,23 C 58,28 58,34 56,37 C 53,38 47,38 44,37 C 42,34 42,28 43,23 Z" fill="url(#knotGold)" stroke="#b45309" stroke-width="0.8"/>
+                <path d="M 47,23 C 51,22 53,24 53,27 C 53,31 52,35 50,37" stroke="rgba(255,255,255,0.7)" stroke-width="1.2" fill="none"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Flor Principal con Rocío -->
+          <div class="tulip-flower">
+            <div class="tulip-glow-halo"></div>
+            <div class="flower-calyx"></div>
+            <div class="petal-back"></div>
+            <div class="petal-left"></div>
+            <div class="petal-right"></div>
+            <div class="petal-front">
+              <div class="dew-drop"></div>
+            </div>
+
+            <!-- Botón exclusivo para abrir la historia -->
+            <div class="story-badge" onclick="triggerTulipSway(document.getElementById('heroStoryTulip')); showStory(true); event.stopPropagation();" title="Presiona aquí para leer">
+              <span class="heart-icon">💛</span>
+              <span>Presiona aquí</span>
+              <span class="heart-icon">💛</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerTulipSway(el); // Solo se balancea suavemente si se toca por error, NO abre la historia
+      });
+
+      forest.appendChild(el);
+    }
+
+    // Invocar tulipán protagonista
+    createHeroStoryTulip();
+
+
+
+    /* ==========================================================================
+       75 BRILLITOS Y DESTELLOS MÁGICOS
+       ========================================================================== */
+    const SPARKLE_COUNT = 75;
+    for (let i = 0; i < SPARKLE_COUNT; i++) {
+      const sp = document.createElement('div');
+      sp.className = 'magic-sparkle';
+      const sz = (Math.random() * 4 + 3).toFixed(1);
+      const x = (Math.random() * 100).toFixed(1);
+      const originY = Math.floor(Math.random() * 30 + 68);
+      const speed = (Math.random() * 7 + 8).toFixed(1);
+      const del = (Math.random() * -18).toFixed(1);
+      const maxOp = (Math.random() * 0.35 + 0.65).toFixed(2);
+
+      sp.style.setProperty('--size', `${sz}px`);
+      sp.style.setProperty('--x', `${x}vw`);
+      sp.style.setProperty('--origin-y', `${originY}vh`);
+      sp.style.setProperty('--speed', `${speed}s`);
+      sp.style.setProperty('--delay', `${del}s`);
+      sp.style.setProperty('--max-op', maxOp);
+      sparklesContainer.appendChild(sp);
+    }
+
+    /* CÉSPED */
+    for (let i = 0; i < 95; i++) {
+      const b = document.createElement('div');
+      b.className = 'grass-item';
+      b.style.setProperty('--gh', `${Math.floor(Math.random() * 45 + 40)}px`);
+      b.style.setProperty('--gw', `${Math.floor(Math.random() * 2 + 2.5)}px`);
+      b.style.setProperty('--gr', `${Math.floor(Math.random() * 28 - 14)}deg`);
+      b.style.setProperty('--gd', `${(Math.random() * 2 + 2.4).toFixed(2)}s`);
+      b.style.setProperty('--gdel', `${(Math.random() * -4).toFixed(2)}s`);
+      grassContainer.appendChild(b);
+    }
+
+    /* BRISA INTERACTIVA */
+    let mouseTimer;
+    window.addEventListener('mousemove', (e) => {
+      const norm = (e.clientX / window.innerWidth) - 0.5;
+      document.documentElement.style.setProperty('--wind-gust', `${norm * 7}deg`);
+      clearTimeout(mouseTimer);
+      mouseTimer = setTimeout(() => {
+        document.documentElement.style.setProperty('--wind-gust', '0deg');
+      }, 1100);
+    });
+
+    function changeAtmosphere(theme, btn) {
+      document.body.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const sun = document.getElementById('sunSystem');
+      if (theme === 'night') {
+        sun.style.top = '14%'; sun.style.right = '24%'; sun.style.transform = 'scale(0.85)';
+      } else if (theme === 'sunset') {
+        sun.style.top = '20%'; sun.style.right = '28%'; sun.style.transform = 'scale(1.15)';
+      } else if (theme === 'noon') {
+        sun.style.top = '6%'; sun.style.right = '42%'; sun.style.transform = 'scale(1.0)';
+      } else {
+        sun.style.top = '14%'; sun.style.right = '20%'; sun.style.transform = 'scale(1.0)';
+      }
+    }
+
+    function setWind(val) {
+      document.documentElement.style.setProperty('--wind-speed-mult', val);
+      document.getElementById('windLabel').textContent = `${parseFloat(val).toFixed(1)}x`;
+    }
+
+    function showStory(open) {
+      const modal = document.getElementById('storyOverlay');
+      if (open) modal.classList.add('active');
+      else modal.classList.remove('active');
+    }
+
+    function backdropClose(e) {
+      if (e.target.id === 'storyOverlay') {
+        showStory(false);
+      }
+    }
+
+    /* MÚSICA LUST FOR LIFE CON FADE-IN SUAVE Y AUTOPLAY AL ENTRAR */
+    let isPlaying = false;
+    const localAudio = document.getElementById('localAudio');
+    const vinyl = document.getElementById('vinylDisc');
+    const playBtn = document.getElementById('btnPlayPause');
+
+    let fadeInterval = null;
+    const TARGET_VOLUME = 0.88;       // Volumen final cálido y claro
+    const FADE_DURATION_MS = 4200;    // 4.2 segundos de subida progresiva y muy suave
+
+    function fadeInVolume() {
+      clearInterval(fadeInterval);
+      localAudio.volume = 0.0;
+      const stepTime = 50;
+      const totalSteps = FADE_DURATION_MS / stepTime;
+      const volumeStep = TARGET_VOLUME / totalSteps;
+
+      fadeInterval = setInterval(() => {
+        if (localAudio.volume + volumeStep < TARGET_VOLUME) {
+          localAudio.volume = Math.min(TARGET_VOLUME, localAudio.volume + volumeStep);
+        } else {
+          localAudio.volume = TARGET_VOLUME;
+          clearInterval(fadeInterval);
+        }
+      }, stepTime);
+    }
+
+    function setMusicPlayingState(playing) {
+      isPlaying = playing;
+      if (playing) {
+        vinyl.classList.add('spinning');
+        playBtn.innerHTML = '❚❚';
+        playBtn.style.background = 'linear-gradient(135deg, #ffd166, #fff4cc)';
+      } else {
+        vinyl.classList.remove('spinning');
+        playBtn.innerHTML = '▶';
+        playBtn.style.background = 'linear-gradient(135deg, #f08c00, #ffb703)';
+      }
+    }
+
+    let songFirstPlay = true;
+
+    function playMusicWithFade() {
+      if (songFirstPlay || localAudio.currentTime < 47.0) {
+        localAudio.currentTime = 47.0; // Inicia justo en el coro romántico de Lana del Rey
+        songFirstPlay = false;
+      }
+      localAudio.volume = 0.0;
+      return localAudio.play().then(() => {
+        setMusicPlayingState(true);
+        fadeInVolume();
+      });
+    }
+
+    function toggleAudioTrack() {
+      if (!isPlaying) {
+        playMusicWithFade().catch((err) => {
+          console.warn("Intento de reproduccion local fallido, reintentando:", err);
+          localAudio.load();
+          localAudio.currentTime = 47.0;
+          playMusicWithFade().catch(e => {
+            console.log("Audio esperando gesto del usuario.");
+          });
+        });
+      } else {
+        clearInterval(fadeInterval);
+        localAudio.pause();
+        setMusicPlayingState(false);
+      }
+    }
+
+    localAudio.addEventListener('play', () => setMusicPlayingState(true));
+    localAudio.addEventListener('pause', () => setMusicPlayingState(false));
+    localAudio.addEventListener('ended', () => setMusicPlayingState(false));
+
+    // Permitir alternar al hacer clic en el disco de vinilo también
+    vinyl.addEventListener('click', toggleAudioTrack);
+
+    // FUNCIÓN DE ENTRADA CON MÚSICA AUTOMÁTICA
+    function enterExperience() {
+      const portal = document.getElementById('welcomePortal');
+      if (portal) {
+        portal.classList.add('fade-out');
+        setTimeout(() => { portal.remove(); }, 850);
+      }
+      playMusicWithFade().catch(err => {
+        console.warn("Reintentando reproduccion:", err);
+        localAudio.load();
+        localAudio.currentTime = 47.0;
+        localAudio.play().then(() => {
+          setMusicPlayingState(true);
+          fadeInVolume();
+        });
+      });
+    }
+
+    // Intentar inicio autónomo si el navegador lo permite
+    function checkDirectAutoplay() {
+      playMusicWithFade().then(() => {
+        // Si el navegador permitió autoplay sin gesto, desvanecer portal automáticamente
+        const portal = document.getElementById('welcomePortal');
+        if (portal) {
+          portal.classList.add('fade-out');
+          setTimeout(() => { portal.remove(); }, 850);
+        }
+      }).catch(() => {
+        // El navegador espera el clic en el portal (comportamiento estándar de seguridad)
+      });
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(checkDirectAutoplay, 250);
+    } else {
+      window.addEventListener('DOMContentLoaded', () => setTimeout(checkDirectAutoplay, 250));
+    }
+  </script>
+</body>
+</html>
