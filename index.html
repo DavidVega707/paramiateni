@@ -188,15 +188,20 @@
       background-color: #060b12;
     }
 
-    .viewport.ready { opacity: 1; }
+    
     .viewport {
+      display: none; /* Cero sangrado ni solapamiento mientras el portal está activo */
       opacity: 0;
-      transition: opacity 0.4s ease;
-      will-change: opacity;
+      transition: opacity 0.5s ease;
       position: relative;
       width: 100%;
       height: 100%;
       overflow: hidden;
+    }
+
+    .viewport.scene-active {
+      display: block;
+      opacity: 1;
     }
 
     .sky {
@@ -1032,21 +1037,22 @@
       transform: translateY(-1px);
     }
 
-    /* MODAL DE HISTORIA - PRE-RENDERIZADO GPU SIN TIRONES */
+    /* MODAL DE HISTORIA - SCROLL NATURAL SIN PÉRDIDA DE CONTENIDO */
     .story-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(8, 14, 24, 0.94);
-      z-index: 100;
+      background: rgba(6, 12, 22, 0.94);
+      z-index: 99999;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 20px;
+      padding: 30px 16px 50px 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transition: opacity 0.32s ease, visibility 0.32s ease;
-      will-change: opacity, visibility;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .story-overlay.active {
@@ -1060,22 +1066,20 @@
       color: #2c251e;
       width: 100%;
       max-width: 680px;
-      max-height: 85vh;
-      border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-      padding: 36px 40px;
-      overflow-y: auto;
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7);
+      padding: 34px 32px 40px 32px;
       position: relative;
       border: 1px solid #e2d7c5;
-      line-height: 1.7;
+      line-height: 1.75;
       font-family: 'Georgia', serif;
-      transform: scale(0.94) translateY(8px);
-      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: transform;
+      margin: auto 0;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
     }
 
     .story-overlay.active .story-parchment {
-      transform: scale(1) translateY(0);
+      transform: scale(1);
     }
 
     .close-btn {
@@ -1113,16 +1117,14 @@
     .welcome-portal {
       position: fixed;
       inset: 0;
-      z-index: 999;
-      background: #090e18; /* 100% Sólido opaco: cero parpadeo ni sangrado visual */
+      z-index: 999999;
+      background: #090e18;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: opacity 0.45s ease, visibility 0.45s ease;
       padding: 20px;
-      will-change: opacity, visibility;
-      transform: translateZ(0);
     }
 
     .welcome-portal.fade-out {
@@ -1249,10 +1251,7 @@
         transform: translateX(-50%) scale(1.60) rotate(4deg) !important;
       }
 
-      .story-parchment {
-        padding: 26px 22px;
-        max-height: 90vh;
-      }
+      .story-parchment { padding: 26px 18px 34px 18px; }
       .story-parchment h1 { font-size: 1.3rem; }
       .story-parchment p { font-size: 0.88rem; line-height: 1.6; }
     }
@@ -1739,8 +1738,7 @@
     grassContainer.appendChild(grassFragment);
 
     // Activar inmediatamente el viewport una vez ensamblado todo el DOM
-    const vp = document.querySelector('.viewport');
-    if (vp) vp.classList.add('ready');
+    
 
     /* BRISA INTERACTIVA */
     let mouseTimer;
@@ -1775,10 +1773,14 @@
       document.getElementById('windLabel').textContent = `${parseFloat(val).toFixed(1)}x`;
     }
 
-    function showStory(open) {
+        function showStory(open) {
       const modal = document.getElementById('storyOverlay');
-      if (open) modal.classList.add('active');
-      else modal.classList.remove('active');
+      if (open) {
+        modal.scrollTop = 0;
+        modal.classList.add('active');
+      } else {
+        modal.classList.remove('active');
+      }
     }
 
     function backdropClose(e) {
@@ -1865,9 +1867,13 @@
     // Permitir alternar al hacer clic en el disco de vinilo también
     vinyl.addEventListener('click', toggleAudioTrack);
 
-    // FUNCIÓN DE ENTRADA CON MÚSICA AUTOMÁTICA
+        // FUNCIÓN DE ENTRADA CON MÚSICA AUTOMÁTICA
     function enterExperience() {
       const portal = document.getElementById('welcomePortal');
+      const vp = document.querySelector('.viewport');
+      if (vp) {
+        vp.classList.add('scene-active');
+      }
       if (portal) {
         portal.classList.add('fade-out');
         setTimeout(() => { portal.remove(); }, 460);
